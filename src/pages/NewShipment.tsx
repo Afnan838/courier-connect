@@ -8,10 +8,13 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeft, Send, Menu } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
 
 const NewShipment = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { user, signOut } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
@@ -19,12 +22,27 @@ const NewShipment = () => {
     e.preventDefault();
     setIsLoading(true);
 
-    // TODO: Connect to Supabase
-    setTimeout(() => {
+    const formData = new FormData(e.currentTarget);
+    const { error } = await supabase.from("shipments").insert({
+      user_id: user!.id,
+      sender_name: formData.get("senderName") as string,
+      sender_phone: formData.get("senderPhone") as string || null,
+      pickup_address: formData.get("pickupAddress") as string,
+      receiver_name: formData.get("receiverName") as string,
+      receiver_phone: formData.get("receiverPhone") as string || null,
+      delivery_address: formData.get("deliveryAddress") as string,
+      description: formData.get("description") as string || null,
+      weight: formData.get("weight") ? Number(formData.get("weight")) : null,
+      priority: formData.get("priority") as string || "standard",
+    });
+
+    if (error) {
+      toast({ title: "Error", description: error.message, variant: "destructive" });
+    } else {
       toast({ title: "Shipment Created", description: "Your courier request has been submitted successfully." });
-      setIsLoading(false);
       navigate("/shipments");
-    }, 1000);
+    }
+    setIsLoading(false);
   };
 
   return (
@@ -33,7 +51,7 @@ const NewShipment = () => {
         <div className="fixed inset-0 bg-foreground/50 z-40 lg:hidden" onClick={() => setSidebarOpen(false)} />
       )}
       <div className={`fixed lg:static inset-y-0 left-0 z-50 transform ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 transition-transform`}>
-        <AppSidebar role="customer" onLogout={() => navigate("/auth")} />
+        <AppSidebar role="customer" onLogout={async () => { await signOut(); navigate("/auth"); }} />
       </div>
 
       <main className="flex-1 overflow-auto">

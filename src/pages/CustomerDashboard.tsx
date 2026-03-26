@@ -6,9 +6,11 @@ import ShipmentCard from "@/components/ShipmentCard";
 import { Package, Truck, CheckCircle, Clock, PlusCircle, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { mockShipments } from "@/data/mockData";
+import { useAuth } from "@/hooks/useAuth";
 
 const CustomerDashboard = () => {
   const navigate = useNavigate();
+  const { profile, signOut } = useAuth();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const shipments = mockShipments.slice(0, 4);
 
@@ -28,7 +30,7 @@ const CustomerDashboard = () => {
       
       {/* Sidebar */}
       <div className={`fixed lg:static inset-y-0 left-0 z-50 transform ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 transition-transform`}>
-        <AppSidebar role="customer" onLogout={() => navigate("/auth")} />
+        <AppSidebar role="customer" userName={profile?.full_name} onLogout={async () => { await signOut(); navigate("/auth"); }} />
       </div>
 
       {/* Main content */}

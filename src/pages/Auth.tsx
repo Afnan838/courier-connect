@@ -7,13 +7,21 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Package, Truck, ArrowRight } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
+import { Navigate } from "react-router-dom";
 
 const Auth = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { user, role, loading } = useAuth();
 
-  // Placeholder - will connect to Supabase Auth once Cloud is enabled
+  // Redirect if already logged in
+  if (!loading && user) {
+    return <Navigate to={role === "admin" ? "/admin" : "/dashboard"} replace />;
+  }
+
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
@@ -27,8 +35,12 @@ const Auth = () => {
       return;
     }
 
-    // TODO: Replace with Supabase auth
-    toast({ title: "Cloud Required", description: "Please enable Lovable Cloud to use authentication." });
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) {
+      toast({ title: "Login failed", description: error.message, variant: "destructive" });
+    } else {
+      toast({ title: "Welcome back!", description: "You've been signed in successfully." });
+    }
     setIsLoading(false);
   };
 
@@ -46,7 +58,20 @@ const Auth = () => {
       return;
     }
 
-    toast({ title: "Cloud Required", description: "Please enable Lovable Cloud to use authentication." });
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: { full_name: fullName },
+        emailRedirectTo: window.location.origin,
+      },
+    });
+
+    if (error) {
+      toast({ title: "Signup failed", description: error.message, variant: "destructive" });
+    } else {
+      toast({ title: "Account created!", description: "Check your email to confirm your account." });
+    }
     setIsLoading(false);
   };
 

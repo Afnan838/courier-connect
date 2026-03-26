@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 
 interface AppSidebarProps {
   role: "customer" | "admin";
+  userName?: string | null;
   onLogout?: () => void;
 }
 
