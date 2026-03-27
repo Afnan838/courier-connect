@@ -21,7 +21,7 @@ const statusFilters: { value: ShipmentStatus | "all"; label: string }[] = [
 
 const Shipments = () => {
   const navigate = useNavigate();
-  const { signOut } = useAuth();
+  const { role, signOut } = useAuth();
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<ShipmentStatus | "all">("all");
   const [sidebarOpen, setSidebarOpen] = useState(false);
