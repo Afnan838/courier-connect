@@ -70,7 +70,7 @@ const Shipments = () => {
         <div className="fixed inset-0 bg-foreground/50 z-40 lg:hidden" onClick={() => setSidebarOpen(false)} />
       )}
       <div className={`fixed lg:static inset-y-0 left-0 z-50 transform ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 transition-transform`}>
-        <AppSidebar role="customer" onLogout={async () => { await signOut(); navigate("/auth"); }} />
+        <AppSidebar role={role === "admin" ? "admin" : "customer"} onLogout={async () => { await signOut(); navigate("/auth"); }} />
       </div>
 
       <main className="flex-1 overflow-auto">
