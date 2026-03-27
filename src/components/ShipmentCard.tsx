@@ -1,6 +1,7 @@
+import { useNavigate } from "react-router-dom";
 import { Card, CardContent } from "@/components/ui/card";
 import StatusBadge, { type ShipmentStatus } from "@/components/StatusBadge";
-import { MapPin, Calendar, Package } from "lucide-react";
+import { MapPin, Calendar } from "lucide-react";
 
 export interface Shipment {
   id: string;
@@ -21,10 +22,11 @@ interface ShipmentCardProps {
 }
 
 const ShipmentCard = ({ shipment, onClick }: ShipmentCardProps) => {
+  const navigate = useNavigate();
   return (
     <Card
       className="glass-card cursor-pointer hover:shadow-md transition-all hover:border-primary/20"
-      onClick={onClick}
+      onClick={onClick ?? (() => navigate(`/shipments/${shipment.id}`))}
     >
       <CardContent className="p-5">
         <div className="flex items-start justify-between mb-4">
