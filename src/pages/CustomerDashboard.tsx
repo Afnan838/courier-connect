@@ -12,7 +12,7 @@ import type { Shipment } from "@/components/ShipmentCard";
 
 const CustomerDashboard = () => {
   const navigate = useNavigate();
-  const { profile, signOut } = useAuth();
+  const { profile, role, signOut } = useAuth();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [shipments, setShipments] = useState<Shipment[]>([]);
   const [loading, setLoading] = useState(true);
