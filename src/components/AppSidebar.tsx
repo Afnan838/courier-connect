@@ -18,12 +18,13 @@ const AppSidebar = ({ role, onLogout }: AppSidebarProps) => {
   ];
 
   const adminLinks = [
-    { to: "/admin", label: "Dashboard", icon: LayoutDashboard },
-    { to: "/admin/shipments", label: "All Shipments", icon: Package },
-    { to: "/admin/users", label: "Users", icon: Users },
+    { to: "/admin", label: "Admin Panel", icon: Settings },
   ];
 
-  const links = role === "admin" ? adminLinks : customerLinks;
+  const links = [
+    ...customerLinks,
+    ...(role === "admin" ? adminLinks : []),
+  ];
 
   return (
     <aside className="w-64 min-h-screen bg-sidebar text-sidebar-foreground flex flex-col border-r border-sidebar-border">

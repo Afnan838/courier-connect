@@ -11,6 +11,7 @@ import CustomerDashboard from "./pages/CustomerDashboard";
 import NewShipment from "./pages/NewShipment";
 import Shipments from "./pages/Shipments";
 import AdminDashboard from "./pages/AdminDashboard";
+import ShipmentDetail from "./pages/ShipmentDetail";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -33,6 +34,9 @@ const App = () => (
             } />
             <Route path="/shipments" element={
               <ProtectedRoute><Shipments /></ProtectedRoute>
+            } />
+            <Route path="/shipments/:id" element={
+              <ProtectedRoute><ShipmentDetail /></ProtectedRoute>
             } />
             <Route path="/admin" element={
               <ProtectedRoute requiredRole="admin"><AdminDashboard /></ProtectedRoute>
