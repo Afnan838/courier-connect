@@ -5,6 +5,7 @@ import ShipmentCard from "@/components/ShipmentCard";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Search, Filter, Menu, Loader2 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import type { ShipmentStatus } from "@/components/StatusBadge";
 import type { Shipment } from "@/components/ShipmentCard";
